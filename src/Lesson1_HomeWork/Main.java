@@ -28,15 +28,41 @@ public class Main {
             System.out.print(finalArr[i] + " ");
         }
         System.out.println();
+        System.out.println();
 
         //Part 2
         //ArrayToArrayList<Double> arrayToArrayList = new ArrayToArrayList<>(new Double[]{15.0, 13.0, 25.0, 45.0, 78.0});
         ArrayToArrayList<String> arrayToArrayList = new ArrayToArrayList<>(new String[]{"Lemon","tea","Time","Sun","snow"});
         ArrayList list = arrayToArrayList.changeArrToArrList();
         System.out.println(list.toString());
+        System.out.println();
+
+        // Part 3
+        Box<Apple> box = new Box<Apple>(new ArrayList<>());
+        Box<Orange> box1 = new Box<Orange>(new ArrayList<>());
+        Box<Apple> box2 = new Box<Apple>(new ArrayList<>());
+        Orange orange1 = new Orange();
+        Apple apple1 = new Apple();
+        box.putFruit(apple1);
+        box.putFruit(apple1);
+        box1.putFruit(orange1);
+        box1.putFruit(orange1);
+        box.putFruit(apple1);
+
+        System.out.println("Вес коробки 1 = "+box.getWeight());
+        System.out.println("Вес коробки 2 = "+box1.getWeight());
+
+        System.out.println(box1.compareTo(box));
+        System.out.println(box1.compareBox(box));
+        System.out.println("Before pour");
+        System.out.println("Box2: "+box2.toString());
+        System.out.println("Box: "+box.toString());
+        box2.pour(box);
+        System.out.println("After pour");
+        System.out.println("Box2: "+box2.toString());
+        System.out.println("Box: "+box.toString());
     }
 
-    // Part 3
 
 
 }
