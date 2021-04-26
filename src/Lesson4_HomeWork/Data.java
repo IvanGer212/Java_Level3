@@ -1,7 +1,7 @@
 package Lesson4_HomeWork;
 
 public class Data {
-    private char letter;
+    private final Object mon = new Object();
     /**
      * 0 - Первый поток пишет букву
      * 1 - Второй поток пишет букву
@@ -9,43 +9,55 @@ public class Data {
      */
     private byte queue = 0;
 
-    public synchronized void writeLetterA(){
-        while (queue!=0){
+    public void writeLetterA(){
+        synchronized (mon) {
             try {
-                wait();
+                for (int i = 0; i < 5; i++) {
+                    while (queue != 0){
+                        mon.wait();
+                    }
+                    queue = 1;
+                    System.out.print('A');
+                    mon.notifyAll();
+                }
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void writeLetterB(){
+        synchronized (mon) {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    while (queue != 1){
+                        mon.wait();
+                    }
+                    queue = 2;
+                    System.out.print('B');
+                    mon.notifyAll();
+                }
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void writeLetterC() {
+        synchronized (mon) {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    while (queue != 2) {
+                        mon.wait();
+                    }
+                    queue = 0;
+                    System.out.print('C');
+                    mon.notifyAll();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        queue = 1;
-        System.out.print('A');
-        notifyAll();
     }
-
-    public synchronized void writeLetterB(){
-        while (queue!=1){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        queue = 2;
-        System.out.print('B');
-        notifyAll();
-    }
-
-    public synchronized void writeLetterC(){
-        while (queue!=2){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        queue = 0;
-        System.out.print('C');
-        notifyAll();
-    }
-
 }

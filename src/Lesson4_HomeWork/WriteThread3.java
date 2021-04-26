@@ -1,17 +1,19 @@
 package Lesson4_HomeWork;
 
 public class WriteThread3 implements Runnable{
-    private final Data data = new Data();
+    private Data data;
+
+    public WriteThread3(Data data) {
+        this.data = data;
+    }
+
     @Override
     public void run() {
-        for (int i =0; i<5; i++){
-            data.writeLetterC();
-        }
-        /**
+        data.writeLetterC();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }

@@ -2,9 +2,10 @@ package Lesson4_HomeWork;
 
 public class Multithreading_I {
     public static void main(String[] args) {
-        new Thread(new WriteThread1()).start();
-        new Thread(new WriteThread2()).start();
-        new Thread(new WriteThread3()).start();
+        Data data = new Data();
+        new Thread(new WriteThread1(data)).start();
+        new Thread(new WriteThread2(data)).start();
+        new Thread(new WriteThread3(data)).start();
     }
 
 }
