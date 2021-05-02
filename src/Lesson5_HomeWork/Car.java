@@ -14,6 +14,7 @@ public class Car implements Runnable {
     private Race race;
     private int speed;
     private String name;
+
     public String getName() {
         return name;
     }
@@ -50,6 +51,9 @@ public class Car implements Runnable {
         if (startRace) {
             for (int i = 0; i < race.getStages().size(); i++) {
                 race.getStages().get(i).go(this);
+            }
+            if (race.getWinner()){
+                System.out.println(this.name + " WINNER!!!");
             }
 
             try {

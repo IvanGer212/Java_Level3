@@ -9,6 +9,8 @@ public class MainClass {
     public static void main(String[] args) {
         CountDownLatch countDownLatch = new CountDownLatch(CARS_COUNT);
         CyclicBarrier cyclicBarrier = new CyclicBarrier(CARS_COUNT+1);
+        //CyclicBarrier cyclicBarrier1 = new CyclicBarrier(2);
+        StarterCyclicBarier starterCyclicBarier = new StarterCyclicBarier(cyclicBarrier);
         System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Подготовка!!!");
         Race race = new Race(new Road(60), new Tunnel(2), new Road(40));
         Car[] cars = new Car[CARS_COUNT];
@@ -18,22 +20,11 @@ public class MainClass {
         for (int i = 0; i < cars.length; i++) {
             new Thread(cars[i]).start();
         }
-        try {
-            cyclicBarrier.await();
-            System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (BrokenBarrierException e) {
-            e.printStackTrace();
-        }
-        cyclicBarrier.reset();
-        try {
-            cyclicBarrier.await();
-            System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (BrokenBarrierException e) {
-            e.printStackTrace();
-        }
+        starterCyclicBarier.startCyclicBarier(cyclicBarrier);
+        System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
+        starterCyclicBarier.startCyclicBarier(cyclicBarrier);
+        System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
+        race.clearWinnerCounter();
+
     }
 }
