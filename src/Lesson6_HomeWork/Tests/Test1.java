@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class Test1 {
     @ParameterizedTest
     @NullAndEmptySource
-    void SouldThrowIllegalArgumentExceptionWhenEmptyArrayPassed(int[] emptyArray){
+    void ShouldThrowIllegalArgumentExceptionWhenEmptyArrayPassed(int[] emptyArray){
         Assertions.assertThrows(IllegalArgumentException.class, ()->Main.extractAfterLastFour(emptyArray));
     }
 

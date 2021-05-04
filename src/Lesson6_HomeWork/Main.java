@@ -33,4 +33,16 @@ public class Main {
         System.arraycopy(array,index,newArray,0,newArray.length);
         return newArray;
     }
+
+    public static boolean checkArrayWithDigitsFourAndOne(int[] array){
+        if (array == null || array.length == 0){
+            throw new IllegalArgumentException("Array could not be empty or null");
+        }
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == 1 || array[i] == 4){
+                return true;
+            }
+        }
+        return false;
+    }
 }
