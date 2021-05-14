@@ -14,107 +14,60 @@ public class TestStarter {
 
     static void start1 (Class testClass) {
         Test1 test1 = new Test1();
-        Map<Method, Integer> mapOfMethodAndAnnotation = new HashMap<>();
+        int counterBeforeSuit = 0;
+        int counterAfterSuit = 0;
+        Method beforeSuite = null;
+        Method afterSuite = null;
+        Map<Integer, List<Method>> mapOfPriorityAndMethod = new HashMap<>();
         ArrayList<Test> listOfAnnotation = new ArrayList<>();
         Method[] declaredMethods = testClass.getDeclaredMethods();
         for (int i = 0; i < declaredMethods.length; i++) {
-            BeforeSuite annotation = declaredMethods[i].getAnnotation(BeforeSuite.class);
-            if (annotation != null){
-                try {
-                    declaredMethods[i].invoke(test1);
-                } catch (InvocationTargetException | IllegalAccessException e) {
-                    e.printStackTrace();
+            BeforeSuite annotationBefore= declaredMethods[i].getAnnotation(BeforeSuite.class);
+            if (annotationBefore != null){
+                invorkMethod(declaredMethods[i],test1);
+                counterBeforeSuit++;
+            }
+            Test annotationsTest = declaredMethods[i].getAnnotation(Test.class);
+            if (annotationsTest != null){
+                Integer priority = annotationsTest.priority();
+                if (!mapOfPriorityAndMethod.containsKey(priority)){
+                List<Method> methodList = new ArrayList<>();
+                methodList.add(declaredMethods[i]);
+                    mapOfPriorityAndMethod.put(priority,methodList);
+                }
+                else {
+                    mapOfPriorityAndMethod.get(priority).add(declaredMethods[i]);
                 }
             }
-            Test annotations1 = declaredMethods[i].getAnnotation(Test.class);
-            if (annotations1 != null){
-                mapOfMethodAndAnnotation.put(declaredMethods[i], annotations1.priority());
-                listOfAnnotation.add(annotations1);
+        }
+
+        List<Integer> priorities = new ArrayList<>(mapOfPriorityAndMethod.keySet());
+        Collections.sort(priorities);
+        for(Integer priority: priorities){
+            for(Method method: mapOfPriorityAndMethod.get(priority)){
+                invorkMethod(method,test1);
             }
         }
-        System.out.println(mapOfMethodAndAnnotation.toString());
-        Iterator<Map.Entry<Method, Integer>> iterator1 = mapOfMethodAndAnnotation.entrySet().iterator();
-            while (iterator1.hasNext()){
-                Integer value = iterator1.next().getValue();
-                System.out.println(value);
-                Method key = iterator1.next().getKey();
-                System.out.println(key);
-                for (int i = 1; i < 11; i++) {
-                    if (value == i){
-                        System.out.println(i);
-                try {
-                    key.invoke(test1);
-                } catch (InvocationTargetException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        }
-
-        //for (int j = 1; j < 11; j++) {
-            //if (iteratorAnnotations.hasNext()){
-            //    Test nextAnnotation = iteratorAnnotations.next();
-            //    System.out.println(nextAnnotation.toString());
-            //    if (nextAnnotation.priority() == j){
-            //        Iterator<Method> methodIterator = Arrays.stream(declaredMethods).iterator();
-            //        if (methodIterator.hasNext()){
-            //            Method nextMethod = methodIterator.next();
-            //            Test annotation2 = nextMethod.getAnnotation(Test.class);
-            //            if (annotation2 != null){
-            //                if (annotation2.equals(nextAnnotation)){
-            //                    try {
-            //                        nextMethod.invoke(test1);
-            //                    } catch (InvocationTargetException | IllegalAccessException e) {
-            //                        e.printStackTrace();
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-        //}
-
-
-    }
-
-    static void start(Class testClass) {
-        Test1 test1 = new Test1();
-        int indexMin = -1, indexMax = -1;
-        int minPrior = 11, maxPrior = 0;
-        Method[] declaredMethods = testClass.getDeclaredMethods();
         for (int i = 0; i < declaredMethods.length; i++) {
-            Annotation[] declaredAnnotations = declaredMethods[i].getDeclaredAnnotations();
-            for (int j = 0; j < declaredAnnotations.length; j++) {
-                BeforeSuite annotation = declaredMethods[i].getAnnotation(BeforeSuite.class);
-                //System.out.println(annotation);
-                if (annotation != null){
-                    //System.out.println(declaredMethods[i]);
-                    try {
-                        declaredMethods[i].invoke(test1);
-                    } catch (InvocationTargetException | IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-                Test annotations1 = declaredMethods[i].getAnnotation(Test.class);
-                if (annotations1 != null){
-                    if (annotations1.priority() < maxPrior){
-                        maxPrior = annotations1.priority();
-                        indexMax = i;
-                    }
-                    if (annotations1.priority() > minPrior){
-                        minPrior = annotations1.priority();
-                        indexMin = i;
-                    }
-
-
-                //    System.out.println(annotations1.priority());
-                }
-                if (declaredAnnotations[j].annotationType().toString().equals("interface Lesson7_HomeWork.BeforeSuite")) {
-                //    System.out.println(declaredMethods[i]);
-                }
-
+            AfterSuite annotationAfter = declaredMethods[i].getAnnotation(AfterSuite.class);
+            if (annotationAfter != null){
+                invorkMethod(declaredMethods[i],test1);
+                counterAfterSuit++;
             }
         }
+
+        if(counterAfterSuit > 1 || counterBeforeSuit > 1){
+            throw new RuntimeException("more than one afterSuit or beforeSuite tests found");
+        }
+
+
     }
+
+    public static void invorkMethod (Method method, Test1 test) {
+            try {
+                method.invoke(test);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
 }
