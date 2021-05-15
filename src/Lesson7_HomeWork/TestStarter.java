@@ -1,6 +1,5 @@
 package Lesson7_HomeWork;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -16,10 +15,7 @@ public class TestStarter {
         Test1 test1 = new Test1();
         int counterBeforeSuit = 0;
         int counterAfterSuit = 0;
-        Method beforeSuite = null;
-        Method afterSuite = null;
         Map<Integer, List<Method>> mapOfPriorityAndMethod = new HashMap<>();
-        ArrayList<Test> listOfAnnotation = new ArrayList<>();
         Method[] declaredMethods = testClass.getDeclaredMethods();
         for (int i = 0; i < declaredMethods.length; i++) {
             BeforeSuite annotationBefore= declaredMethods[i].getAnnotation(BeforeSuite.class);
